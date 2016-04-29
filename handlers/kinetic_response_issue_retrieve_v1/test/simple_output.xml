@@ -1,0 +1,3 @@
+<results type='xml'>
+  <result name="issues" type="Regexp">^---\s.+</result>
+</results>

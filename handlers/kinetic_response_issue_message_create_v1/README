@@ -1,0 +1,32 @@
+== Kinetic Response Issue Message Create
+This handler creates a message for the specified issue.
+
+=== Parameters
+[Issue Guid]
+  The Issue's guid.
+    * The Issue Guid can be found at the end of the url of an issue.
+        - ex: {{response_server}}/issues/{{issue_guid}}
+[Message]
+  The message that will be created for the isue.
+
+=== Results
+The contents of the message will be returned.
+
+==== Sample Configuration
+Issue Guid:     abc123-the-issue-guid
+Message:        Hello World!
+
+=== Detailed Description
+This handler uses the Oauth client key and client secret
+to retrieve an access token that connects to the Kinetic Response
+API. It will then create a message for the issue based on what 
+was entered for the Issue Guid.
+
+=== How to Retrieve Application ID and Secret
+  1. Go to <response_server>/oauth/applications (ex: test.kineticdata.com/oauth/applications)
+       * must have admin access
+  2. Click on "New Application"
+       * Enter in a Name
+       * Enter in a redirect uri
+           - If running locally, use "urn:ietf:wg:oauth:2.0:oob"
+  3. On the next page, the Application ID and Secret will be presented

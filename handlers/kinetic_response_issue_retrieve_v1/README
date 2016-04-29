@@ -1,0 +1,19 @@
+== Kinetic Response Issue Retrieve
+This handler will retrieve all issues with an “Active” status.
+
+=== Results
+All issues with an 'Active' status.
+
+=== Detailed Description
+This handler uses the Oauth client key and client secret
+to retrieve an access token that connects to the Kinetic Response
+API. It will then return all 'Active' issues.
+
+=== How to Retrieve Application ID and Secret
+  1. Go to <response_server>/oauth/applications (ex: test.kineticdata.com/oauth/applications)
+       * must have admin access
+  2. Click on "New Application"
+       * Enter in a Name
+       * Enter in a redirect uri
+           - If running locally, use "urn:ietf:wg:oauth:2.0:oob"
+  3. On the next page, the Application ID and Secret will be presented

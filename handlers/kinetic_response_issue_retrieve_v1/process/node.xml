@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="kinetic_response_issue_retrieve" name="Kinetic Response Issue Retrieve" schema_version="1.0" version="1">
+  <author>support@kineticdata.com</author>
+  <description>This handler retrieves all Kinetic Response Issues.</description>
+  <helpurl>http://ktc.kineticdata.com/handler/kinetic_response_issue_retrieve/1</helpurl>
+  <visible>true</visible>
+  <deferrable>false</deferrable>
+  <parameters>
+    <parameter id="issue_guid" label="issue_guid" required="true"
+               tooltip="The guid of the issue you are trying to retrieve."/>
+  </parameters>
+  <handler name="kinetic_response_issue_retrieve" version="1">
+    <infos>
+      <info name="server_url">&lt;%= @info['server_url'] %&gt;</info>
+      <info name="host_email">&lt;%= @info['host_email'] %&gt;</info>
+      <info name="host_password">&lt;%= @info['host_password'] %&gt;</info>
+    </infos>
+    <parameters>
+      <parameter name="issue_guid">&lt;%= @parameters['issue_guid'] %&gt;</parameter>
+    </parameters>
+  </handler>
+  <results format="xml">
+    <result name='issues'></result>
+  </results>
+</taskDefinition>

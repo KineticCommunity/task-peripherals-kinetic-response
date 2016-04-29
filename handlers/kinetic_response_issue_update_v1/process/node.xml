@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="kinetic_response_issue_update" name="Kinetic Response Issue Update" schema_version="1.0" version="1">
+  <author>support@kineticdata.com</author>
+  <description>This handler updates a Kinetic Response Issue.</description>
+  <helpurl>http://ktc.kineticdata.com/handler/kinetic_response_issue_update/1</helpurl>
+  <visible>true</visible>
+  <deferrable>false</deferrable>
+  <parameters>
+    <parameter id="issue_guid" label="Issue Guid" required="true"
+               tooltip="The guid of the issue to update."/>
+    <parameter id="issue_name" label="Issue Name" required="false"
+               tooltip="The name of the issue created"/>
+    <parameter id="issue_description" label="Issue Description" required="false"
+               tooltip="A short issue description"/>
+    <parameter id="owner_id" label="Owner ID" required="true"
+               tooltip="The id of the owner to assign this issue to."/>
+  </parameters>
+  <handler name="kinetic_response_issue_update" version="1">
+    <infos>
+      <info name="server_url">&lt;%= @info['server_url'] %&gt;</info>
+      <info name="host_email">&lt;%= @info['host_email'] %&gt;</info>
+      <info name="host_password">&lt;%= @info['host_password'] %&gt;</info>
+    </infos>
+    <parameters>
+      <parameter name="issue_guid">&lt;%= @parameters['issue_guid'] %&gt;</parameter>
+      <parameter name="issue_name">&lt;%= @parameters['issue_name'] %&gt;</parameter>
+      <parameter name="issue_description">&lt;%= @parameters['issue_description'] %&gt;</parameter>
+      <parameter name="owner_id">&lt;%= @parameters['owner_id'] %&gt;</parameter>
+    </parameters>
+  </handler>
+  <results />
+</taskDefinition>

@@ -1,0 +1,32 @@
+== Kinetic Response Issue Invite
+This handler creates an invite for the specified issue.
+
+=== Parameters
+[Issue Guid]
+  The Issue's guid.
+    * The Issue Guid can be found at the end of the url of an issue.
+        - ex: {{response_server}}/issues/{{issue_guid}}
+[Invitee Email]
+  The email of the person that will be invited.
+
+=== Results
+This handler does not return any results.
+
+==== Sample Configuration
+Issue Guid:         abc123-the-issue-guid
+Invitee Email:      bob@example.com
+
+=== Detailed Description
+This handler uses the Oauth client key and client secret
+to retrieve an access token that connects to the Kinetic Response
+API. It will then send an invite to the Invitee Email based on
+the Issue Guid (the issue the invitee is being invited to).
+
+=== How to Retrieve Application ID and Secret
+  1. Go to <response_server>/oauth/applications (ex: test.kineticdata.com/oauth/applications)
+       * must have admin access
+  2. Click on "New Application"
+       * Enter in a Name
+       * Enter in a redirect uri
+           - If running locally, use "urn:ietf:wg:oauth:2.0:oob"
+  3. On the next page, the Application ID and Secret will be presented

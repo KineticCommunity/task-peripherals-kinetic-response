@@ -1,0 +1,37 @@
+== Kinetic Response Issue Update
+This handler updates an issue.
+
+=== Parameters
+[Issue Guid]
+  The Issue's guid that will be updated.
+    * The Issue Guid can be found at the end of the url of an issue.
+        - ex: {{response_server}}/issues/{{issue_guid}}
+[Issue Name]
+  The new name of the issue that will be updated.
+[Issue Description]
+  The new description of the issue that will be updated.
+[Owner ID]
+  The ID of the new owner that will own this issue.
+
+=== Results
+This handler does not return any results.
+
+==== Sample Configuration
+Issue Guid:             abc123-the-issue-guid
+Issue Name:             Implementing Kinetic Request 2015 (new)
+Issue Description:      Updating this issue to reflect the new budget in 2015
+Owner ID:               23
+
+=== Detailed Description
+This handler uses the Oauth client key and client secret
+to retrieve an access token that connects to the Kinetic Response
+API. It will then update the issue based on the parameters entered.
+
+=== How to Retrieve Application ID and Secret
+  1. Go to <response_server>/oauth/applications (ex: test.kineticdata.com/oauth/applications)
+       * must have admin access
+  2. Click on "New Application"
+       * Enter in a Name
+       * Enter in a redirect uri
+           - If running locally, use "urn:ietf:wg:oauth:2.0:oob"
+  3. On the next page, the Application ID and Secret will be presented
