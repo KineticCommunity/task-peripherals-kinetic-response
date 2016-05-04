@@ -1,0 +1,6 @@
+<results>
+    <result name="count" type="RegExp">.+</result>
+    <result name="submissions" type="RegExp">.+</result>
+    <result name="XML" type="RegExp">.+</result>
+    <result name="usernameList" type="RegExp">.+</result>
+</results>
