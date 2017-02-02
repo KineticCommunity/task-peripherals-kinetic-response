@@ -1,0 +1,18 @@
+== Kinetic Response User Create
+Creates a user in Kinetic Response
+
+=== Parameters
+[Name]
+  The name of the user that is being created.
+[Email]
+  The email of the user being created.
+[Password]
+  The email of the user being created.
+[Type]
+  The email of the user being created.
+
+=== Results
+none
+
+=== Detailed Description
+This handler creates a user.
