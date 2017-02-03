@@ -43,56 +43,58 @@ class KineticResponseUserCreateV1
     error_handling        = @parameters["error_handling"]
     api_route = "#{api_server}/api/v1/users"
 
-    if @info_values["enable_debug_logging"].downcase == "true" 
-      enable_debug_logging = true
-    else 
-      enable_debug_logging = false
-    end
+    enable_debug_logging = @info_values["enable_debug_logging"].downcase == "true" 
 
     puts "API ROUTE: #{api_route}" if enable_debug_logging
 
-    resource = RestClient::Resource.new(api_route, { :user => api_username, :password => api_password })
+    resource = RestClient::Resource.new("#{api_route}/#{URI.encode(@parameters["email"])}", { :user => api_username, :password => api_password })
 
-    # Get list of current users and make sure the user we're adding doesn't exist
-    currentUsers = JSON.parse(resource.get)
-    newUser = currentUsers.find {|user| user['email'] == @parameters["email"] }
+    # define the handler error message
+    handler_error_message = nil
 
-    # If new user doesn't exist, create it, otherwise return
-    if newUser.nil?
-      # Build up data to send to kinetic response
-      data = {}
-      data.tap do |json|
-        json[:user] = {
-              :name      => @parameters["name"],
-              :email     => @parameters["email"],
-              :password  => (@parameters["password"] if !@parameters['password'].empty?), 
-              :type      => (@parameters["type"] if !@parameters['type'].empty?)
-        }
+    # Check if the user exists
+    begin
+      response = resource.get
+      puts "User #{@parameters["email"]} already exists in response" if enable_debug_logging
+    rescue RestClient::Exception => error
+      if error.http_code == 404
+        resource = RestClient::Resource.new(api_route, { :user => api_username, :password => api_password })
+        # Build up data to send to kinetic response
+        data = {}
+        data.tap do |json|
+          json[:user] = {
+                :name      => @parameters["name"],
+                :email     => @parameters["email"],
+                :password  => (@parameters["password"] if !@parameters['password'].empty?), 
+                :type      => (@parameters["type"] if !@parameters['type'].empty?)
+          }
+        end
+
+        begin
+          response = resource.post(data.to_json, { :content_type => "json", :accept => "json" })
+          puts "User #{@parameters["email"]} successfully created" if enable_debug_logging
+        rescue RestClient::Exception => error
+          begin
+            error_message = JSON.parse(error.response)["reasons"]
+          rescue Exception => e
+            error_message = e.inspect
+          end
+          if error_handling == "Raise Error"
+            raise error_message
+          else
+            handler_error_message = "#{error.http_code}: #{escape(error_message)}"
+          end
+        end
+      else
+        handler_error_message = "#{error.http_code}: #{escape(error.inspect)}"
       end
-
-      response = resource.post(data.to_json, { :content_type => "json", :accept => "json" })
-      puts "API Response: #{response.inspect}" if enable_debug_logging
-    else
-      puts "USER #{@parameters['email']} ALREAY EXISTS" if enable_debug_logging
     end
 
-    <<-RESULTS
+    results = <<-RESULTS
     <results>
-      <result name="Handler Error Message"></result>
+      <result name="Handler Error Message">#{escape(handler_error_message)}</result>
     </results>
     RESULTS
-
-    rescue RestClient::Exception => error
-      error_message = JSON.parse(error.response)["reasons"]
-      if error_handling == "Raise Error"
-        raise error_message
-      else
-        <<-RESULTS
-        <results>
-          <result name="Handler Error Message">#{error.http_code}: #{escape(error_message)}</result>
-        </results>
-        RESULTS
-      end
   end
 
   ##############################################################################
