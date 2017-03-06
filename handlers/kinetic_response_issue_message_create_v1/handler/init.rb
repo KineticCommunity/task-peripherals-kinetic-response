@@ -23,17 +23,22 @@ class KineticResponseIssueMessageCreateV1
   end
 
   def execute
-    # Log in and get auth token
-  auth_token = get_auth_token
-  resource = RestClient::Resource.new(@info_values["api_server"] + "/api/v1/issues/" + @parameters['issue_guid'] + "/messages")
+    api_username          = URI.encode(@info_values["api_username"])
+    api_password          = @info_values["api_password"]
+    api_server            = @info_values["api_server"]
+    error_handling        = @parameters["error_handling"]
+    api_route = "#{@info_values["api_server"]}/api/v1/issues/#{@parameters['issue_guid']}/messages"
 
-  data =  {
-            "message" => { :body => @parameters['message']}
-          }
+    # Build Resource
+    resource = RestClient::Resource.new(api_route, { :user => api_username, :password => api_password })
+
+    data =  {
+              "message" => { :body => @parameters['message']}
+            }
 
     handler_error_message = nil
     begin
-      result = resource.post(data.to_json, { accept: :json, content_type: :json, authorization: "Bearer #{auth_token}" })
+      result = resource.post(data.to_json, { accept: :json, content_type: :json})
     rescue RestClient::Exception => error
       begin
         error_message = JSON.parse(error.response)["reasons"]
@@ -71,18 +76,5 @@ class KineticResponseIssueMessageCreateV1
   end
   # This is a ruby constant that is used by the escape method
   ESCAPE_CHARACTERS = {'&'=>'&amp;', '>'=>'&gt;', '<'=>'&lt;', '"' => '&quot;'}
-
-  def get_auth_token
-    resource = RestClient::Resource.new(@info_values["api_server"] + "/api/v1/sessions")
-    data = {
-             "user_login" => {
-               "email" => @info_values["api_username"],
-               "password" => @info_values["api_password"]
-             }
-           }
-
-    result = resource.post(data.to_json, { accept: :json, content_type: :json })
-    auth_token = JSON.parse(result)["auth_token"]
-  end
 
 end
