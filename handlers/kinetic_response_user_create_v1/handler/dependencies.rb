@@ -1,3 +1,5 @@
+require 'rexml/document'
+
 # If the Kinetic Task version is under 4, load the openssl and json libraries
 # because they are not included in the ruby version
 if KineticTask::VERSION.split(".").first.to_i < 4

@@ -95,6 +95,8 @@ class KineticResponseUserCreateV1
       <result name="Handler Error Message">#{escape(handler_error_message)}</result>
     </results>
     RESULTS
+
+    return results
   end
 
   ##############################################################################

@@ -37,7 +37,6 @@ class KineticResponseIssueCreateV1
   # If it returns a result, it will be in a special XML format that the task engine expects. These
   # results will then be available to subsequent tasks in the process.
   def execute
-    RestClient.log = "stdout"
     api_username          = URI.encode(@info_values["api_username"])
     api_password          = @info_values["api_password"]
     api_server            = @info_values["api_server"]
@@ -101,6 +100,8 @@ class KineticResponseIssueCreateV1
       <result name="Handler Error Message">#{escape(handler_error_message)}</result>
     </results>
     RESULTS
+
+    return results
   end
 
   ##############################################################################

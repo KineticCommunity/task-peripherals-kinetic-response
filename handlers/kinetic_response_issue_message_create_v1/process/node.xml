@@ -6,21 +6,27 @@
   <visible>true</visible>
   <deferrable>false</deferrable>
   <parameters>
+    <parameter id="error_handling" label="Error Handling" required="true"
+      tooltip="Determine what to return if an error is encountered." menu="Error Message,Raise Error">Error Message</parameter>
     <parameter id="issue_guid" label="Issue Guid" required="true"
-               tooltip="The guid of the issue to invite."/>
+      tooltip="The guid of the issue to invite."/>
     <parameter id="message" label="Message" required="true"
-               tooltip="The message for the issue."/>
+      tooltip="The message for the issue."/>
   </parameters>
   <handler name="kinetic_response_issue_message_create" version="1">
     <infos>
-      <info name="server_url">&lt;%= @info['server_url'] %&gt;</info>
-      <info name="host_email">&lt;%= @info['host_email'] %&gt;</info>
-      <info name="host_password">&lt;%= @info['host_password'] %&gt;</info>
+      <info name="api_password">&lt;%= @info['api_password'] %&gt;</info>
+      <info name="api_server">&lt;%= @info['api_server'] %&gt;</info>
+      <info name="api_username">&lt;%= @info['api_username'] %&gt;</info>
+      <info name="enable_debug_logging">&lt;%= @info["enable_debug_logging"] %&gt;</info>
     </infos>
     <parameters>
+      <parameter name="error_handling">&lt;%= @parameters.has_key?("error_handling") ? @parameters["error_handling"] : "Raise" %&gt;</parameter>
       <parameter name="issue_guid">&lt;%= @parameters['issue_guid'] %&gt;</parameter>
       <parameter name="message">&lt;%= @parameters['message'] %&gt;</parameter>
     </parameters>
   </handler>
-  <results />
+  <results format="xml">
+    <result name="Handler Error Message"/>
+  </results>
 </taskDefinition>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <taskInfo version="1.0">
-  <info name="server_url" description="The url of the server that the new host should be created on." />
-  <info name="host_email" description="The email address of the host user that has the ability to create a new issueuser." />
-  <info name="host_password" description="The password of the host user that has the ability to create a new issue." />
+  <info name="api_server" description="Kinetic Response API URL">http://server:port/kinetic-response</info>
+  <info name="api_username" description="Name of user account that has permission to use the API"></info>
+  <info name="api_password" description="Password for the API user" type="encrypted"></info>
+  <info name="enable_debug_logging" description="True or False">false</info>
 </taskInfo>

@@ -1,10 +1,12 @@
 {
   'info' => {
-    'server_url' => 'http://localhost:3000',
-    'host_email' => 'user@kineticdata.com',
-    'host_password' => 'password'
+    'api_server' => '',
+    'api_username' => '',
+    'api_password' => '',
+    'enable_debug_logging' => 'true'
   },
-    'parameters' => {
+  'parameters' => {
+        'error_handling' => 'Error Message',
         'issue_guid' => '',
         'issue_name' => '',
         'issue_description' => '',

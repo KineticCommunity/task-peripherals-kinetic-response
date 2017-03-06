@@ -12,7 +12,7 @@ class KineticResponseIssueRetrieveV1
     REXML::XPath.each(@input_document,"/handler/infos/info") { |item|
       @info_values[item.attributes['name']] = item.text
     }
-    @enable_debug_logging = @info_values['enable_debug_logging'] == 'Yes'
+    @enable_debug_logging = @info_values['enable_debug_logging'].downcase == 'true'
 
     # Store parameters values in a Hash of parameter names to values.
     @parameters = {}
@@ -24,14 +24,31 @@ class KineticResponseIssueRetrieveV1
 
   def execute
     auth_token = get_auth_token
-    resource = RestClient::Resource.new(@info_values["server_url"] + "/api/v1/issues/" + @parameters['issue_guid'])
+    resource = RestClient::Resource.new(@info_values["api_server"] + "/api/v1/issues/" + @parameters['issue_guid'])
 
-    result = resource.get({ accept: :json, content_type: :json, authorization: "Bearer #{auth_token}" })
+    issues = nil
+    handler_error_message = nil
+    begin
+      result = resource.get({ accept: :json, content_type: :json, authorization: "Bearer #{auth_token}" })
+      issues = result.body
+    rescue RestClient::Exception => error
+      begin
+        error_message = JSON.parse(error.response)["reasons"]
+      rescue Exception => e
+        error_message = error.inspect
+      end
+      if error_handling == "Raise Error"
+        raise error_message
+      else
+        handler_error_message = "#{error.http_code}: #{escape(error_message)}"
+      end
+    end
 
     # Return the results
     return <<-RESULTS
     <results>
-        <result name="issues">#{result.body}</result>
+        <result name="issues">#{escape(issues)}</result>
+        <result name="Handler Error Message">#{escape(handler_error_message)}</result>
     </results>
     RESULTS
   end
@@ -54,12 +71,12 @@ class KineticResponseIssueRetrieveV1
   ESCAPE_CHARACTERS = {'&'=>'&amp;', '>'=>'&gt;', '<'=>'&lt;', '"' => '&quot;'}
 
   def get_auth_token
-    resource = RestClient::Resource.new(@info_values["server_url"] + "/api/v1/sessions")
+    resource = RestClient::Resource.new(@info_values["api_server"] + "/api/v1/sessions")
 
     data = {
              "user_login" => {
-               "email" => @info_values["host_email"],
-               "password" => @info_values["host_password"]
+               "email" => @info_values["api_username"],
+               "password" => @info_values["api_password"]
              }
            }
 

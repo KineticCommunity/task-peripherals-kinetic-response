@@ -1,3 +1,4 @@
 <results type='xml'>
+  <result name="Handler Error Message" type="Regexp"></result>
   <result name="issues" type="Regexp">^---\s.+</result>
 </results>

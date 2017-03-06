@@ -12,7 +12,7 @@ class KineticResponseIssueUpdateV1
     REXML::XPath.each(@input_document,"/handler/infos/info") { |item|
       @info_values[item.attributes['name']] = item.text
     }
-    @enable_debug_logging = @info_values['enable_debug_logging'] == 'Yes'
+    @enable_debug_logging = @info_values['enable_debug_logging'].downcase == 'true'
 
     # Store parameters values in a Hash of parameter names to values.
     @parameters = {}
@@ -25,17 +25,37 @@ class KineticResponseIssueUpdateV1
   def execute
     # Log in and get auth token
     auth_token = get_auth_token
-    resource = RestClient::Resource.new(@info_values["server_url"] + "/api/v1/issues/" + @parameters['issue_guid'])
+    resource = RestClient::Resource.new(@info_values["api_server"] + "/api/v1/issues/" + @parameters['issue_guid'])
 
     data =  {
-              "name" => @parameters['issue_name'],
-              "description" => @parameters['issue_description'],
-              "owner_id" => @parameters['owner_id']
-            }
+      "name" => @parameters['issue_name'],
+      "description" => @parameters['issue_description'],
+      "owner_id" => @parameters['owner_id']
+    }
 
-    result = resource.put(data.to_json, { accept: :json, content_type: :json, authorization: "Bearer #{auth_token}" })
+    handler_error_message = nil
+    begin
+      result = resource.put(data.to_json, { accept: :json, content_type: :json, authorization: "Bearer #{auth_token}" })
+    rescue RestClient::Exception => error
+      begin
+        error_message = JSON.parse(error.response)["reasons"]
+      rescue Exception => e
+        error_message = error.inspect
+      end
+      if error_handling == "Raise Error"
+        raise error_message
+      else
+        handler_error_message = "#{error.http_code}: #{escape(error_message)}"
+      end
+    end
 
-    return "<results />"
+    results = <<-RESULTS
+    <results>
+      <result name="Handler Error Message">#{escape(handler_error_message)}</result>
+    </results>
+    RESULTS
+
+    return results
   end
 
   ##############################################################################
@@ -56,12 +76,12 @@ class KineticResponseIssueUpdateV1
   ESCAPE_CHARACTERS = {'&'=>'&amp;', '>'=>'&gt;', '<'=>'&lt;', '"' => '&quot;'}
 
   def get_auth_token
-    resource = RestClient::Resource.new(@info_values["server_url"] + "/api/v1/sessions")
+    resource = RestClient::Resource.new(@info_values["api_server"] + "/api/v1/sessions")
 
     data = {
              "user_login" => {
-               "email" => @info_values["host_email"],
-               "password" => @info_values["host_password"]
+               "email" => @info_values["api_username"],
+               "password" => @info_values["api_password"]
              }
            }
 
