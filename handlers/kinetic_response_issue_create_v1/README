@@ -1,0 +1,24 @@
+== Kinetic Response Issue Create
+Creates an issue in Kinetic Response
+
+=== Parameters
+[Name]
+  Name of the new Kinetic Response issue.
+[Description]
+  Description for the issue.
+[Owner Email]
+  Email of the user that will own the new issue (if left blank, owner will
+  default to the api_username).
+[Tag List]
+  A comma separated list of tags to add to the new issue.
+
+=== Results
+[Issue GUID]
+  The GUID for the newly created Response issue.
+
+=== Detailed Description
+This handler creates a new Kinetic Response issue. If an owner email is passed
+in, the handler first checks if the email exists as a user on the Responst API
+Server. If the user does exist, the user's Id is retrieved and is passed into
+the Kinetic Response Issue create POST along with the issue name, description 
+(optional), and tag list (optional).

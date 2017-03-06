@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="kinetic_response_issue_create" name="Kinetic Response Issue Create" schema_version="1.0" version="1">
+    <author>support@kineticdata.com</author>
+    <description>
+        Creates a new issue in Kinetic Response
+    </description>
+    <helpurl></helpurl>
+    <visible>true</visible>
+    <deferrable>false</deferrable>
+    <parameters>
+        <parameter id="error_handling" label="Error Handling" required="true"
+          tooltip="Determine what to return if an error is encountered." menu="Error Message,Raise Error">Error Message</parameter>
+        <parameter id="name" label="Name" required="true"
+          tooltip="Name of the new Kinetic Response issue."/>
+        <parameter id="description" label="Description" required="false"
+          tooltip="Description for the issue."/>
+        <parameter id="owner_email" label="Owner Email" required="false"
+          tooltip="Email of the user that will own the new issue (if left blank, owner will default to the api_username)."/>
+        <parameter id="tag_list" label="Tag List" required="false"
+          tooltip="A comma separated list of tags to add to the new issue."/>
+    </parameters>
+    <handler name="kinetic_response_issue_create" version="1">
+        <infos>
+            <info name="api_password">&lt;%= @info['api_password'] %&gt;</info>
+            <info name="api_server">&lt;%= @info['api_server'] %&gt;</info>
+            <info name="api_username">&lt;%= @info['api_username'] %&gt;</info>
+            <info name="enable_debug_logging">&lt;%= @info["enable_debug_logging"] %&gt;</info>
+        </infos>
+        <parameters>
+            <parameter name="error_handling">&lt;%= @parameters.has_key?("error_handling") ? @parameters["error_handling"] : "Raise" %&gt;</parameter>
+            <parameter name="name">&lt;%= @parameters["name"] %&gt;</parameter>
+            <parameter name="description">&lt;%= @parameters['description'] %&gt;</parameter>
+            <parameter name="owner_email">&lt;%= @parameters['owner_email'] %&gt;</parameter>
+            <parameter name="tag_list">&lt;%= @parameters['tag_list'] %&gt;</parameter>
+        </parameters>
+    </handler>
+    <results format="xml">
+        <result name="Issue GUID"/>
+        <result name="Handler Error Message"/>
+    </results>
+</taskDefinition>

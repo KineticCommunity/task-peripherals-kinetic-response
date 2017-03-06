@@ -1,0 +1,4 @@
+<results>
+    <result name="Issue GUID" type="Regexp"></result>
+    <result name="Handler Error Message" type="Regexp"></result>
+</results>
