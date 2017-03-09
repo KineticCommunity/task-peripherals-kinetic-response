@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskDefinition id="kinetic_response_issue_uninvite" name="Kinetic Response Issue Uninvite" schema_version="1.0" version="1">
+  <author>support@kineticdata.com</author>
+  <description>This handler uninvites a user from a Kinetic Response Issue.</description>
+  <helpurl>http://ktc.kineticdata.com/handler/kinetic_response_issue_uninvite/1</helpurl>
+  <visible>true</visible>
+  <deferrable>false</deferrable>
+  <parameters>
+    <parameter id="error_handling" label="Error Handling" required="true"
+        tooltip="Determine what to return if an error is encountered." menu="Error Message,Raise Error">Error Message</parameter>
+    <parameter id="issue_guid" label="Issue Guid" required="true"
+        tooltip="The guid of the issue to uninvite from."/>
+    <parameter id="email" label="Email" required="true"
+        tooltip="The email of the user to uninvite."/>
+  </parameters>
+  <handler name="kinetic_response_issue_uninvite" version="1">
+    <infos>
+      <info name="api_password">&lt;%= @info['api_password'] %&gt;</info>
+      <info name="api_server">&lt;%= @info['api_server'] %&gt;</info>
+      <info name="api_username">&lt;%= @info['api_username'] %&gt;</info>
+      <info name="enable_debug_logging">&lt;%= @info["enable_debug_logging"] %&gt;</info>
+    </infos>
+    <parameters>
+      <parameter name="error_handling">&lt;%= @parameters.has_key?("error_handling") ? @parameters["error_handling"] : "Raise" %&gt;</parameter>
+      <parameter name="issue_guid">&lt;%= @parameters['issue_guid'] %&gt;</parameter>
+      <parameter name="email">&lt;%= @parameters['email'] %&gt;</parameter>
+    </parameters>
+  </handler>
+  <results format="xml">
+    <result name="Handler Error Message"/>
+  </results>
+</taskDefinition>

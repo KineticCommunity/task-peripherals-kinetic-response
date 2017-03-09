@@ -1,0 +1,25 @@
+== Kinetic Response Issue Uninvite
+This handler uninvites a user from a Kinetic Response Issue.
+
+=== Parameters
+[Issue Guid]
+  The Issue's guid.
+    * The Issue Guid can be found at the end of the url of an issue.
+        - ex: {{response_server}}/issues/{{issue_guid}}
+[Email]
+  The email of the person that will be uninvited.
+
+=== Results
+This handler does not return any results.
+
+==== Sample Configuration
+Issue Guid:         abc123-the-issue-guid
+Email:      bob@example.com
+
+=== Detailed Description
+This handler uses basic auth to send a request to Kinetic Response to uninvite a
+user from the list of users participating or invited to a Response issue. If the
+inputted email matches a user included in the invites list, the guid for that
+invite will be retrieved and then used to retract the invite. Similarly, if an
+email match is found in the participants list, the guid for the user will be
+retrieved and used to remove the user from that issue.
