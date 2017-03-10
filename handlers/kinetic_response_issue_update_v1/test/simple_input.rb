@@ -10,6 +10,7 @@
         'issue_guid' => '',
         'issue_name' => '',
         'issue_description' => '',
-        'owner_id' => ''
+        'owner_email' => '',
+        'tag_list' => ''
     }
 }

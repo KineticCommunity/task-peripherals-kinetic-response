@@ -4,3 +4,7 @@ Kinetic_Response_Issue_Update_V1 (2015-04-06)
 (2017-03-06)
 * Changed the name of the info values to be more consistent with other handlers
 * Added error handling choices
+
+(2017-03-10)
+* Changed owner_id to owner_email
+* Added tag_list as a parameter

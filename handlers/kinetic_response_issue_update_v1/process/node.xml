@@ -10,12 +10,14 @@
       tooltip="Determine what to return if an error is encountered." menu="Error Message,Raise Error">Error Message</parameter>
     <parameter id="issue_guid" label="Issue Guid" required="true"
       tooltip="The guid of the issue to update."/>
-    <parameter id="issue_name" label="Issue Name" required="false"
+    <parameter id="issue_name" label="Name" required="false"
       tooltip="The name of the issue created"/>
-    <parameter id="issue_description" label="Issue Description" required="false"
+    <parameter id="issue_description" label="Description" required="false"
       tooltip="A short issue description"/>
-    <parameter id="owner_id" label="Owner ID" required="true"
-      tooltip="The id of the owner to assign this issue to."/>
+    <parameter id="owner_email" label="Owner Email" required="false"
+      tooltip="The email of the owner to assign this issue to."/>
+    <parameter id="tag_list" label="Tag List" required="false"
+      tooltip="A comma separated list of tags to add to the new issue."/>
   </parameters>
   <handler name="kinetic_response_issue_update" version="1">
     <infos>
@@ -29,7 +31,8 @@
       <parameter name="issue_guid">&lt;%= @parameters['issue_guid'] %&gt;</parameter>
       <parameter name="issue_name">&lt;%= @parameters['issue_name'] %&gt;</parameter>
       <parameter name="issue_description">&lt;%= @parameters['issue_description'] %&gt;</parameter>
-      <parameter name="owner_id">&lt;%= @parameters['owner_id'] %&gt;</parameter>
+      <parameter name="owner_email">&lt;%= @parameters['owner_email'] %&gt;</parameter>
+      <parameter name="tag_list">&lt;%= @parameters['tag_list'] %&gt;</parameter>
     </parameters>
   </handler>
   <results format="xml">

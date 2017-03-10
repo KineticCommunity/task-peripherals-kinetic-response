@@ -29,13 +29,27 @@ class KineticResponseIssueUpdateV1
     error_handling        = @parameters["error_handling"]
     api_route = "#{@info_values["api_server"]}/api/v1/issues/#{@parameters['issue_guid']}"
 
+    owner_id = nil
+    # Check if the user exists and retrieve the user id if it does
+    if !@parameters['owner_email'].empty?
+      resource = RestClient::Resource.new("#{api_server}/api/v1/users/#{URI.encode(@parameters["owner_email"])}", { :user => api_username, :password => api_password })
+      begin
+        response = resource.get
+        owner_id = JSON.parse(response)["id"]
+      rescue RestClient::ResourceNotFound => error
+        raise "The owner email '#{@parameters['owner_email']}' could not be found"
+      end
+    end
+
     resource = RestClient::Resource.new(api_route, { :user => api_username, :password => api_password })
 
-    data =  {
-      "name" => @parameters['issue_name'],
-      "description" => @parameters['issue_description'],
-      "owner_id" => @parameters['owner_id']
-    }
+    data = {}
+    data.tap do |json|
+      json["name"] = @parameters['issue_name'] if !@parameters['issue_name'].empty?
+      json["description"] = @parameters['issue_description'] if !@parameters['issue_description'].empty?
+      json["owner_id"] = owner_id if !owner_id.nil?
+      json["tag_list"] = @parameters["tag_list"] if !@parameters["tag_list"].empty?
+    end
 
     handler_error_message = nil
     begin
